@@ -1,7 +1,6 @@
 const https = require("https");
 const auth = require("basic-auth");
 const fs = require("fs");
-const filePath = "./jsonLog";
 const dotenv = require("dotenv");
 dotenv.config();
 const options = {
@@ -9,19 +8,20 @@ const options = {
   cert: process.env.CERT,
 };
 const users = JSON.parse(process.env.USERS);
-
+const now = new Date();
+log('Start server');
 const server = https.createServer(options, (req, res) => {
   const credentials = auth(req);
+  log('New connect from ' + req.connection.remoteAddress + ' with credential ' + JSON.stringify(credentials));
   if (
     !credentials ||
     !isLoginAndPasswordProper(credentials.name, credentials.pass)
   ) {
+    log('Wrong credentials');
     res.statusCode = 401;
     res.setHeader("WWW-Authenticate", 'Basic realm="save"');
     res.end("Access denied");
   } else {
-    //todo:: sprawdzic co sie stanie jak bedzie probowal stworzyc plik tam gdzie nie moze z powodu uprawnien,
-    // albo w ogole sprobowac wyjebac jakos działanie pliku
     createFileIfNotExists(process.env.JSON_LOG_PATH);
     let jsonLog = openJSONFile(process.env.JSON_LOG_PATH);
 
@@ -33,6 +33,7 @@ const server = https.createServer(options, (req, res) => {
       jsonLog[key] = [credentials.name];
     }
     saveJSONtoFile(jsonLog, process.env.JSON_LOG_PATH);
+    log('Saved to jsonLog');
     res.writeHead(200);
     res.end("Saved");
   }
@@ -57,4 +58,10 @@ function saveJSONtoFile(jsonObject, filePath) {
 
 function isLoginAndPasswordProper(login, password) {
   return login in users && users[login] === password;
+}
+
+function log(message) {
+    const now = new Date();
+    const time = now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear() + ' ' + now.getHours() + ':' + now.getMinutes();
+    console.log(time + ' - ' +message);
 }
