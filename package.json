@@ -4,6 +4,7 @@
   "dependencies": {
     "basic-auth": "^2.0.1",
     "dotenv": "^16.0.3",
+    "node-cron": "^3.0.2",
     "twilio": "^3.84.0"
   },
   "devDependencies": {

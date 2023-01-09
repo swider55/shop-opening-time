@@ -9,15 +9,20 @@ const options = {
 };
 const users = JSON.parse(process.env.USERS);
 const now = new Date();
-log('Start server');
+log("Start server");
 const server = https.createServer(options, (req, res) => {
   const credentials = auth(req);
-  log('New connect from ' + req.connection.remoteAddress + ' with credential ' + JSON.stringify(credentials));
+  log(
+    "New connect from " +
+      req.connection.remoteAddress +
+      " with credential " +
+      JSON.stringify(credentials)
+  );
   if (
     !credentials ||
     !isLoginAndPasswordProper(credentials.name, credentials.pass)
   ) {
-    log('Wrong credentials');
+    log("Wrong credentials");
     res.statusCode = 401;
     res.setHeader("WWW-Authenticate", 'Basic realm="save"');
     res.end("Access denied");
@@ -33,7 +38,7 @@ const server = https.createServer(options, (req, res) => {
       jsonLog[key] = [credentials.name];
     }
     saveJSONtoFile(jsonLog, process.env.JSON_LOG_PATH);
-    log('Saved to jsonLog');
+    log("Saved to jsonLog");
     res.writeHead(200);
     res.end("Saved");
   }
@@ -61,7 +66,16 @@ function isLoginAndPasswordProper(login, password) {
 }
 
 function log(message) {
-    const now = new Date();
-    const time = now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear() + ' ' + now.getHours() + ':' + now.getMinutes();
-    console.log(time + ' - ' +message);
+  const now = new Date();
+  const time =
+    now.getDate() +
+    "." +
+    (now.getMonth() + 1) +
+    "." +
+    now.getFullYear() +
+    " " +
+    now.getHours() +
+    ":" +
+    now.getMinutes();
+  console.log(time + " - " + message);
 }

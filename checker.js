@@ -8,8 +8,7 @@ const client = require("twilio")(
 );
 const users = JSON.parse(process.env.USERS);
 
-
-cron.schedule("* 21 * * *", function () {
+cron.schedule("0 11 * * *", function () {
   const now = new Date();
   const key =
     now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear();
@@ -38,14 +37,14 @@ function sendSms(message) {
       body:
         "UWAGA! Te sklepy nie daly znac dzisiaj o sobie: " +
         message +
-        ". Sprawdz co się stalo",
+        ". Sprawdz co sie stalo",
       messagingServiceSid: process.env.MESSAGING_SERVICE_SID,
       to: "+48663270503",
     })
     .then((message) => log(message.sid))
     .catch((error) => {
-        log("Can not send sms. I will try again in 5 minutes")
-        log(error)
+      log("Can not send sms. I will try again in 5 minutes");
+      log(error);
       setTimeout(function () {
         sendSms(message);
       }, 300000);
@@ -54,7 +53,16 @@ function sendSms(message) {
 }
 
 function log(message) {
-    const now = new Date();
-    const time = now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear() + ' ' + now.getHours() + ':' + now.getMinutes();
-    console.log(time+ ' - ' +message);
+  const now = new Date();
+  const time =
+    now.getDate() +
+    "." +
+    (now.getMonth() + 1) +
+    "." +
+    now.getFullYear() +
+    " " +
+    now.getHours() +
+    ":" +
+    now.getMinutes();
+  console.log(time + " - " + message);
 }
