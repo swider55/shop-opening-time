@@ -1,4 +1,4 @@
-This program registers connection from clients and later, on schedule time in scheduleChecker.js, checks if every client gave know about self If not, scheduleChecker.js sends SMS
+This program registers connection from clients and later, on schedule time in scheduleChecker.js, checks if every client gave know about self. If not, scheduleChecker.js sends SMS
 
 ## ON SERVER SIDE
 
