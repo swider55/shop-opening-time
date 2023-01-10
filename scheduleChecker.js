@@ -8,23 +8,27 @@ const client = require("twilio")(
 );
 const users = JSON.parse(process.env.USERS);
 
-cron.schedule("0 11 * * *", function () {
-  const now = new Date();
-  const key =
-    now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear();
-  log("I will try send sms");
-  const jsonLog = openJSONFile(process.env.JSON_LOG_PATH);
-  let userWhichNotInLog = [];
-
-  for (const [user, value] of Object.entries(users)) {
-    if (!(key in jsonLog) || !jsonLog[key].includes(user)) {
-      userWhichNotInLog.push(user);
-    }
-  }
-  if (userWhichNotInLog.length !== 0) {
-    sendSms(userWhichNotInLog.join(","));
-  }
+cron.schedule("10 9 * * 1,2,3,4,5,6", function () {
+    run();
 });
+
+function run() {
+    const now = new Date();
+    const key =
+        now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear();
+    log("I will try send sms");
+    const jsonLog = openJSONFile(process.env.JSON_LOG_PATH);
+    let userWhichNotInLog = [];
+
+    for (const [user, value] of Object.entries(users)) {
+        if (jsonLog === undefined | !(key in jsonLog) || !jsonLog[key].includes(user)) {
+            userWhichNotInLog.push(user);
+        }
+    }
+    if (userWhichNotInLog.length !== 0) {
+        sendSms(userWhichNotInLog.join(","));
+    }
+}
 
 function openJSONFile(filePath) {
   const jsonString = fs.readFileSync(filePath);
