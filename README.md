@@ -5,16 +5,16 @@ This program registers connection from clients and later, on schedule time in sc
 Copy all files, and type\
 ```npm install```
 
-create .env file with\
-CERT - cert SSL. Can create own, more info below\
-KEY - key SSL. Can create own, more info below\
-USERS - users which will contact with server in format
-```{"login":"password"}```\
-ACCOUNT_SID - need to get from twilio.com\
-AUTH_TOKEN - need to get from twilio.com\
-MESSAGING_SERVICE_SID - need to get from twilio.com\
+create .env file with
+```
+CERT - cert SSL. Can create own, more info below
+KEY - key SSL. Can create own, more info below
+USERS - users which will contact with server in format {"login":"password"}
+ACCOUNT_SID - need to get from twilio.com
+AUTH_TOKEN - need to get from twilio.com
+MESSAGING_SERVICE_SID - need to get from twilio.com
 JSON_LOG_PATH - path/to/log
-
+```
 If you dont want to buy SSL, you can create own by:
 ```
 openssl genrsa -out key.pem 2048
