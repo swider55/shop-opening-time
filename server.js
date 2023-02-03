@@ -8,10 +8,11 @@ const options = {
   cert: process.env.CERT,
 };
 const users = JSON.parse(process.env.USERS);
-const now = new Date();
+
 log("Start server");
 const server = https.createServer(options, (req, res) => {
   const credentials = auth(req);
+  const now = new Date();
   log(
     "New connect from " +
       req.connection.remoteAddress +

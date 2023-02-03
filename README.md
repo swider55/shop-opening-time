@@ -47,18 +47,8 @@ pm2 save
 In windowsClient.go, change\
 ```req.SetBasicAuth("username", "password")```\
 next type\
-```shop-opening-time % GOOS=windows GOARCH=amd64 go build -o bin/windowsClient.exe windowsClient.go```\
+```GOOS=windows GOARCH=amd64 go build -o bin/windowsClient.exe windowsClient.go```\
 in order to create .exe file for Windows. After that, send created file to computer with Windows\
 On machine with Windows press 'Windows logo key  + R', and type\
 ```shell:startup```\
 Past created earlier file to opened folder\
-
-
-
-\
-na kazdym kompie skasowac skrypt z document i dac komende w powerShell (jako administrator)
-```schtasks /delete /tn "Startup Script"```
-
-to na dole skasowac
-```schtasks /create /tn "Startup Script" /tr "powershell.exe -file C:\Scripts\MyScript.ps1" /sc onstart /ru System```
-#### where 'C:\Scripts\MyScript.ps1' replace with path to 'windowsClient.ps'
