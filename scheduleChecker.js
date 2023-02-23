@@ -16,7 +16,7 @@ function run() {
     const now = new Date();
     const key =
         now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear();
-    log("I will try send sms");
+    log("Check jsonLog");
     if (!fs.existsSync(process.env.JSON_LOG_PATH)) {
         sendSms('UWAGA! Nie ma pliku jsonLog. Skontaktuj sie z administratorm');
         return;
@@ -31,6 +31,7 @@ function run() {
         }
     }
     if (userWhichNotInLog.length !== 0) {
+        log("I will send sms");
         sendSms("UWAGA! Te sklepy nie daly znac dzisiaj o sobie: " +
             userWhichNotInLog.join(",") +
             ". Sprawdz co sie stalo");
