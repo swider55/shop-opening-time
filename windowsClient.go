@@ -40,7 +40,7 @@ func main() {
         time.Sleep(10 * time.Second)
         if !sendRequest() {
             fmt.Println("The problem still appears. Please contact with administrator");
-            fmt.Print("Press 'Enter' to continue close Windows")
+            fmt.Print("Press 'Enter' to close Windows")
             bufio.NewReader(os.Stdin).ReadBytes('\n')
         }
     }
