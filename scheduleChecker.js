@@ -17,16 +17,23 @@ function run() {
     const key =
         now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear();
     log("I will try send sms");
+    if (!fs.existsSync(process.env.JSON_LOG_PATH)) {
+        sendSms('UWAGA! Nie ma pliku jsonLog. Skontaktuj sie z administratorm');
+        return;
+    }
+
     const jsonLog = openJSONFile(process.env.JSON_LOG_PATH);
     let userWhichNotInLog = [];
 
     for (const [user, value] of Object.entries(users)) {
-        if (jsonLog === undefined | !(key in jsonLog) || !jsonLog[key].includes(user)) {
+        if (!(key in jsonLog) || !jsonLog[key].includes(user)) {
             userWhichNotInLog.push(user);
         }
     }
     if (userWhichNotInLog.length !== 0) {
-        sendSms(userWhichNotInLog.join(","));
+        sendSms("UWAGA! Te sklepy nie daly znac dzisiaj o sobie: " +
+            userWhichNotInLog.join(",") +
+            ". Sprawdz co sie stalo");
     }
 }
 
@@ -39,11 +46,9 @@ function sendSms(message) {
   client.messages
     .create({
       body:
-        "UWAGA! Te sklepy nie daly znac dzisiaj o sobie: " +
-        message +
-        ". Sprawdz co sie stalo",
+        message,
       messagingServiceSid: process.env.MESSAGING_SERVICE_SID,
-      to: "+48663270503",
+      to: "+48518495816",
     })
     .then((message) => log(message.sid))
     .catch((error) => {
