@@ -1,7 +1,7 @@
 const https = require("https");
 const auth = require("basic-auth");
 const dotenv = require("dotenv");
-const helpers = require("./helpers")
+const helpers = require("./helpers");
 dotenv.config();
 const options = {
   key: process.env.KEY,
@@ -13,7 +13,7 @@ helpers.log("Start server");
 const server = https.createServer(options, (req, res) => {
   const credentials = auth(req);
   const now = new Date();
-    helpers.log(
+  helpers.log(
     "New connect from " +
       req.connection.remoteAddress +
       " with credential " +
@@ -28,7 +28,7 @@ const server = https.createServer(options, (req, res) => {
     res.setHeader("WWW-Authenticate", 'Basic realm="save"');
     res.end("Access denied");
   } else {
-      helpers.createFileIfNotExists(process.env.JSON_LOG_PATH);
+    helpers.createFileIfNotExists(process.env.JSON_LOG_PATH);
     let jsonLog = openJSONFile(process.env.JSON_LOG_PATH);
 
     const key =
@@ -45,7 +45,6 @@ const server = https.createServer(options, (req, res) => {
   }
 });
 server.listen(443);
-
 
 function isLoginAndPasswordProper(login, password) {
   return login in users && users[login] === password;
