@@ -8,16 +8,15 @@ const client = require("twilio")(
 );
 const users = JSON.parse(process.env.USERS);
 
-const OWNER_NUMBER ="+48518495816"
+const SCHEDULE_WITHOUT_SUNDAY_AT_9_10_AM = "10 9 * * 1,2,3,4,5,6";
+const EVERY_SUNDAY_AT_12_AM = '0 12 * * 0';
 
-const ADMIN_NUMBER ="+48663270503"
-
-cron.schedule("10 9 * * 1,2,3,4,5,6", function () {
+cron.schedule(SCHEDULE_WITHOUT_SUNDAY_AT_9_10_AM, function () {
     run();
 });
 
-cron.schedule('0 12 * * 0', () => {
-    sendSms('Test sms from shop-opening-time', ADMIN_NUMBER);
+cron.schedule(EVERY_SUNDAY_AT_12_AM, () => {
+    sendSms('Test sms from shop-opening-time', process.env.ADMIN_NUMBER);
 });
 
 function run() {
@@ -26,7 +25,7 @@ function run() {
         now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear();
     log("Check jsonLog");
     if (!fs.existsSync(process.env.JSON_LOG_PATH)) {
-        sendSms('UWAGA! Nie ma pliku jsonLog. Skontaktuj sie z administratorm', OWNER_NUMBER);
+        sendSms('UWAGA! Nie ma pliku jsonLog. Skontaktuj sie z administratorem', process.env.BOSS_NUMBER);
         return;
     }
 
@@ -42,7 +41,7 @@ function run() {
         log("I will send sms");
         sendSms("UWAGA! Te sklepy nie daly znac dzisiaj o sobie: " +
             userWhichNotInLog.join(",") +
-            ". Sprawdz co sie stalo", OWNER_NUMBER);
+            ". Sprawdz co sie stalo", process.env.BOSS_NUMBER);
     }
 }
 

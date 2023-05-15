@@ -14,6 +14,8 @@ ACCOUNT_SID - need to get from twilio.com
 AUTH_TOKEN - need to get from twilio.com
 MESSAGING_SERVICE_SID - need to get from twilio.com
 JSON_LOG_PATH - path/to/log
+BOSS_NUMBER - Company owner number in format "+48000000000"
+ADMIN_NUMBER - admin number in format "+48000000000"
 ```
 If you dont want to buy SSL, you can create own by:
 ```
