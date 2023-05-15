@@ -1,6 +1,7 @@
 const fs = require("fs");
 const cron = require("node-cron");
 const dotenv = require("dotenv");
+const helpers = require("./helpers")
 dotenv.config();
 const client = require("twilio")(
   process.env.ACCOUNT_SID,
@@ -9,7 +10,7 @@ const client = require("twilio")(
 const users = JSON.parse(process.env.USERS);
 
 const SCHEDULE_WITHOUT_SUNDAY_AT_9_10_AM = "10 9 * * 1,2,3,4,5,6";
-const EVERY_SUNDAY_AT_12_AM = '0 12 * * 0';
+const EVERY_SUNDAY_AT_12_AM = "0 12 * * 0";
 
 cron.schedule(SCHEDULE_WITHOUT_SUNDAY_AT_9_10_AM, function () {
     run();
@@ -23,13 +24,13 @@ function run() {
     const now = new Date();
     const key =
         now.getDate() + "." + (now.getMonth() + 1) + "." + now.getFullYear();
-    log("Check jsonLog");
+    helpers.log("Check jsonLog");
     if (!fs.existsSync(process.env.JSON_LOG_PATH)) {
         sendSms('UWAGA! Nie ma pliku jsonLog. Skontaktuj sie z administratorem', process.env.BOSS_NUMBER);
         return;
     }
 
-    const jsonLog = openJSONFile(process.env.JSON_LOG_PATH);
+    const jsonLog = helpers.openJSONFile(process.env.JSON_LOG_PATH);
     let userWhichNotInLog = [];
 
     for (const [user, value] of Object.entries(users)) {
@@ -38,17 +39,13 @@ function run() {
         }
     }
     if (userWhichNotInLog.length !== 0) {
-        log("I will send sms");
+        helpers.log("I will send sms");
         sendSms("UWAGA! Te sklepy nie daly znac dzisiaj o sobie: " +
             userWhichNotInLog.join(",") +
             ". Sprawdz co sie stalo", process.env.BOSS_NUMBER);
     }
 }
 
-function openJSONFile(filePath) {
-  const jsonString = fs.readFileSync(filePath);
-  return JSON.parse(jsonString);
-}
 
 function sendSms(message, receiveNumber) {
   client.messages
@@ -58,10 +55,10 @@ function sendSms(message, receiveNumber) {
       messagingServiceSid: process.env.MESSAGING_SERVICE_SID,
       to: receiveNumber,
     })
-    .then((message) => log(message.sid))
+    .then((message) => helpers.log(message.sid))
     .catch((error) => {
-      log("Can not send sms. I will try again in 5 minutes");
-      log(error);
+      helpers.log("Can not send sms. I will try again in 5 minutes");
+      helpers.log(error);
       setTimeout(function () {
         sendSms(message);
       }, 300000);
@@ -69,17 +66,3 @@ function sendSms(message, receiveNumber) {
     .done();
 }
 
-function log(message) {
-  const now = new Date();
-  const time =
-    now.getDate() +
-    "." +
-    (now.getMonth() + 1) +
-    "." +
-    now.getFullYear() +
-    " " +
-    now.getHours() +
-    ":" +
-    now.getMinutes();
-  console.log(time + " - " + message);
-}
