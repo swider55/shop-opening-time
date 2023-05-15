@@ -1,6 +1,10 @@
+## OVERVIEW
+
 This program registers connection from clients and later, on schedule time in scheduleChecker.js, checks if every client gave know about self. If not, scheduleChecker.js sends SMS
 
-## ON SERVER SIDE
+
+## HOW TO RUN
+### ON SERVER SIDE
 
 Copy all files, and type\
 ```npm install```
@@ -45,7 +49,7 @@ pm2 startup
 pm2 save
 ```
 
-## CLIENT SIDE (WITH WINDOWS)
+### CLIENT SIDE (WITH WINDOWS)
 In windowsClient.go, change\
 ```req.SetBasicAuth("username", "password")```\
 next type\
